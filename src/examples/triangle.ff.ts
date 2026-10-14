@@ -110,6 +110,8 @@ export function run(canvas: HTMLCanvasElement): void {
 
   // Lo que sigue aca es basicamente para manejar los botones y dibujar la figura y color seleccionados
   
+  setupState(gl, canvas); // no se si es necesario 
+  
   function render(): void {
     const shape = shapes[shapeIndex];
     const color = COLORS[colorIndex];

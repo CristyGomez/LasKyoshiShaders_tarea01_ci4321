@@ -36,6 +36,25 @@ export const SQUARE_INDICES = new Uint16Array([
 // [Proximamente] Datos para el Círculo
 
 
+// Vamos a definir una interface para poder dibujar cada figura
+export interface Shape {
+  name: string;
+  vao: WebGLVertexArrayObject;
+  draw: () => void;
+}
+
+// Y una interface para los colores
+export interface Color {
+  name: string;
+  rgb: [number, number, number];
+}
+
+export const COLORS: Color[] = [
+  { name: 'red',   rgb: [1, 0, 0] },
+  { name: 'green', rgb: [0, 1, 0] },
+  { name: 'blue',  rgb: [0, 0, 1] },
+];
+
 // Creo que ya no necesitamos este constante
 export const STRIDE_BYTES = 7 * 4;//4 bytes per float (Float32)
 export const COLOR_OFFSET_BYTES = 3 * 4;

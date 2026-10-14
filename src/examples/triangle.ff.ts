@@ -1,14 +1,8 @@
 // RGB triangle, FixedFunction (FF) version.
 // FF hides the shaders. Compare with triangle.vanilla.ts, which shows them.
 import { ATTRIB, createFixedFunction, LIGHTING } from '../vendor/ff/ff';
-import { CANVAS_SIZE, CLEAR_COLOR, TRIANGLE, SQUARE_POSITIONS, SQUARE_INDICES } from './shared';
+import { CANVAS_SIZE, CLEAR_COLOR, TRIANGLE, SQUARE_POSITIONS, SQUARE_INDICES, COLORS, Shape } from './shared';
 
-// Vamos a definir una interface para poder dibujar cada figura
-interface Shape {
-  name: string;
-  vao: WebGLVertexArrayObject;
-  draw: () => void;
-}
 
 // Step 1. Get the WebGL2 context.
 function getContext(canvas: HTMLCanvasElement): WebGL2RenderingContext {
@@ -80,10 +74,18 @@ function draw(gl: WebGL2RenderingContext,
   shape.draw(); // AHora cada figura sabe como dibujarse a si misma, ya sea con drawArrays o drawElements
 }
 
+
 export function run(canvas: HTMLCanvasElement): void {
   const gl = getContext(canvas);
   const ff = createFixedFunction(gl, { debug: true });
   ff.disable(LIGHTING); // unlit: the output is the per-vertex color
+  // Buscamos los botones en el HTML usando su id
+  const shapeBtn = document.getElementById('shape-btn')!;
+  const colorBtn = document.getElementById('color-btn')!;
+
+  // COmenzamos en el primer shape y color (Triangulo y rojo)
+  let shapeIndex = 0; 
+  let colorIndex = 0; 
 
   // Aqui estaran nuestros VAOs, que son los que nos van a permitir dibujar los objetos (Triangulo, Cuadrado, etc)
 
@@ -100,12 +102,37 @@ export function run(canvas: HTMLCanvasElement): void {
   // [Proximamente] Circulo
 
   const shapes: Shape[] = [  
-    {name: 'Triangle', vao: triangleVao,       draw: () => ff.drawArrays(gl.TRIANGLES, 0, 3) },
+    {name: 'Triangle', vao: triangleVao, draw: () => ff.drawArrays(gl.TRIANGLES, 0, 3) },
     {name: 'Square',    vao: squareVao,  draw: () => ff.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0) },
     // [Proximamente] datos para el hexagono
     // [Proximamente] datos para el circulo
   ];
 
-  setupState(gl, canvas);
-  draw(gl, ff, shapes[1], [1, 0, 0]); // Por ahora, veamos un cuadrado rojo jaja
+  // Lo que sigue aca es basicamente para manejar los botones y dibujar la figura y color seleccionados
+  
+  function render(): void {
+    const shape = shapes[shapeIndex];
+    const color = COLORS[colorIndex];
+
+    // Mandamos a dibujar la figura con el color seleccionado
+    draw(gl, ff, shape, color.rgb);
+
+    // Actualizamos el texto de los botones para mostrar la figura y color seleccionados
+    shapeBtn.textContent = `Shape: ${shape.name}`;
+    colorBtn.textContent = `Color: ${color.name}`;
+  }
+
+  // Usamos addEventListener para que cuando se haga click en los botones, se cambie la figura o el color y se vuelva a dibujar
+
+  shapeBtn.addEventListener('click', () => {
+    shapeIndex = (shapeIndex + 1) % shapes.length;
+    render();
+  });
+
+  colorBtn.addEventListener('click', () => {
+    colorIndex = (colorIndex + 1) % COLORS.length;
+    render();
+  });
+
+  render(); 
 }

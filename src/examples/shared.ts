@@ -14,6 +14,28 @@ export const TRIANGLE = new Float32Array([
    0.7,  -0.6,  0.0,  
 ]);
 
+// Datos para el Cuadrado
+
+// La posiciones nos dicen donde dibujar los vertices
+export const SQUARE_POSITIONS = new Float32Array([
+  // x    y     z
+  -0.7, -0.7, 0.0, // p0 abajo-izquierda
+   0.7, -0.7, 0.0, // p1 abajo-derecha
+   0.7,  0.7, 0.0, // p2 arriba-derecha
+  -0.7,  0.7, 0.0, // p3 arriba-izquierda
+]);
+
+// Los indices nos dicen que vertices unimos/usamos para formar los triangulos 
+export const SQUARE_INDICES = new Uint16Array([
+  0, 1, 2, // Triangulo 1 (con vertices p0, p1, p2)
+  0, 2, 3, // Triangulo 2 (con vertices p0, p2, p3)
+]);
+
+// [Proximamente] Datos para el Hexágono
+
+// [Proximamente] Datos para el Círculo
+
+
 // Creo que ya no necesitamos este constante
 export const STRIDE_BYTES = 7 * 4;//4 bytes per float (Float32)
 export const COLOR_OFFSET_BYTES = 3 * 4;

@@ -82,3 +82,4 @@ export const COLORS: Color[] = [
 // 0 = los vértices vienen pegados, sin huecos
 export const STRIDE_BYTES = 0;
 
+export const SEGMENTS = 64;

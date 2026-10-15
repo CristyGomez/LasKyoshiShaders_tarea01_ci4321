@@ -1,5 +1,5 @@
 import { ATTRIB, createFixedFunction, LIGHTING } from '../vendor/ff/ff';
-import { CANVAS_SIZE, CLEAR_COLOR, TRIANGLE, SQUARE_POSITIONS, SQUARE_INDICES, COLORS, STRIDE_BYTES, Shape, makeCircle } from './shared';
+import { CANVAS_SIZE, CLEAR_COLOR, TRIANGLE, SQUARE_POSITIONS, SQUARE_INDICES, COLORS, STRIDE_BYTES, Shape, makeCircle, SEGMENTS} from './shared';
 
 
 
@@ -104,14 +104,14 @@ export function run(canvas: HTMLCanvasElement): void {
   const hexVao = createVAO(gl, hexBuffer);
 
   // Circulo
-  const circlePositions = makeCircle(64, 0.6);
+  const circlePositions = makeCircle(SEGMENTS, 0.6);
   const circleBuffer = createVertexBuffer(gl, circlePositions);
   const circleVao = createVAO(gl, circleBuffer); 
 
   //arreglo de figuras, cada una con su nombre, su VAO y la funcion que usa para dibujarse a si misma
   const shapes: Shape[] = [  
-    {name: 'Triangle', vao: triangleVao, draw: () => ff.drawArrays(gl.TRIANGLES, 0, 3) },
-    {name: 'Square',   vao: squareVao,   draw: () => ff.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0) },
+    {name: 'triangle', vao: triangleVao, draw: () => ff.drawArrays(gl.TRIANGLES, 0, 3) },
+    {name: 'square',   vao: squareVao,   draw: () => ff.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0) },
     { name: 'hexagon', vao: hexVao,    draw: () => ff.drawArrays(gl.TRIANGLE_FAN, 0, hexPositions.length / 2) },
     { name: 'circle',  vao: circleVao, draw: () => ff.drawArrays(gl.TRIANGLE_FAN, 0, circlePositions.length / 2) },
   ];

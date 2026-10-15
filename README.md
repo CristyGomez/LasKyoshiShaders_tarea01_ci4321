@@ -1,57 +1,61 @@
-# RGB Triangle: FixedFunction vs. vanilla WebGL2
+# Tarea 1: Figuras en WebGL2 (CI4321)
 
-One RGB triangle, written two ways. Both versions render the same image.
+**Equipo:** Las Kyoshi Shaders
 
-- `src/examples/triangle.ff.ts` uses the FixedFunction (FF) module. The shaders stay hidden.
-- `src/examples/triangle.vanilla.ts` uses raw WebGL2. The shaders are visible.
+**Integrantes:**
 
-## Requirements
+- Cristina Gómez
+- Sandibel Soares
 
-- Node.js 18 or later (tested with Node 24)
+Programa en WebGL2 y TypeScript que muestra una figura a la vez (triángulo, cuadrado, hexágono y círculo), construidas solo con triángulos. Un botón cambia la figura y otro cambia el color (rojo, verde, azul). El color se mantiene al cambiar de figura.
+
+## Requisitos
+
+- Node.js 18 o superior
 - npm
-- A browser with WebGL2 support
+- Un navegador con soporte para WebGL2 (Chrome, Edge o Firefox)
 
 ## Run
 
-1. Install the dependencies. This is the only step that needs a network connection.
+1. Instalar las dependencias (solo la primera vez):
 
    ```
    npm install
    ```
 
-2. Start the development server.
+2. Iniciar el servidor de desarrollo:
 
    ```
    npm run dev
    ```
 
-3. Open `http://localhost:5173` in your browser.
+3. Abrir `http://localhost:5173` en el navegador.
 
-## Use
+## Uso
 
-- Click "FF (main)" or "Vanilla WebGL2 (second)" to switch versions.
-- Press `T` to toggle with the keyboard.
-- The right panel shows the source file of the active version.
-- The URL hash (`#ff` or `#vanilla`) stores the selection.
+- Click en **Shape:** cambia la figura en el orden triángulo > cuadrado > hexágono > círculo > triángulo.
+- Click en **Color:** cambia el color en el orden rojo > verde > azul > rojo.
+- La página arranca con el triángulo en rojo.
 
-## Other commands
+## Otros comandos
 
-| Command           | Action                                          |
-| ----------------- | ----------------------------------------------- |
-| `npm run build`   | Type-check with `tsc` and build to `dist/`      |
-| `npm run preview` | Serve the built `dist/` folder locally          |
+| Comando           | Acción                                              |
+| ----------------- | --------------------------------------------------- |
+| `npm run build`   | Revisa los tipos con `tsc` y genera `dist/`         |
+| `npm run preview` | Sirve localmente la carpeta `dist/` ya construida   |
 
-## Project layout
+## Estructura del proyecto
 
 ```
-index.html                 page markup
-src/main.ts                toggle, canvas swap, source panel
-src/examples/shared.ts     vertex data and clear color (#1b1e2b)
-src/examples/triangle.*.ts the two implementations
-src/vendor/ff/             FF v1.0 (read only; do not edit)
+index.html                    estructura de la página y botones
+src/main.ts                   crea el canvas y arranca el programa
+src/style.css                 estilos de la página
+src/examples/shared.ts        datos de las figuras, colores y makeCircle
+src/examples/triangle.ff.ts   buffers, VAOs, dibujo y manejo de botones
+src/vendor/ff/                FixedFunction v1.0 del curso (no se modificó)
 ```
 
-## Troubleshooting
+## Problemas comunes
 
-- **Blank page or "WebGL2 is not available."** Enable hardware acceleration in the browser, or try another browser.
-- **Port 5173 is in use.** Stop the other process, or run `npx vite --port 3000`.
+- **Página en blanco o "WebGL2 is not available."** Activar la aceleración por hardware en el navegador o probar con otro navegador.
+- **El puerto 5173 está en uso.** Cerrar el otro proceso o correr `npx vite --port 3000`.

@@ -55,6 +55,4 @@ export const COLORS: Color[] = [
   { name: 'blue',  rgb: [0, 0, 1] },
 ];
 
-// Creo que ya no necesitamos este constante
-export const STRIDE_BYTES = 7 * 4;//4 bytes per float (Float32)
-export const COLOR_OFFSET_BYTES = 3 * 4;
+export const STRIDE_BYTES = 0

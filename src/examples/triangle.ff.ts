@@ -1,7 +1,7 @@
 // RGB triangle, FixedFunction (FF) version.
 // FF hides the shaders. Compare with triangle.vanilla.ts, which shows them.
 import { ATTRIB, createFixedFunction, LIGHTING } from '../vendor/ff/ff';
-import { CANVAS_SIZE, CLEAR_COLOR, TRIANGLE, SQUARE_POSITIONS, SQUARE_INDICES, COLORS, Shape } from './shared';
+import { CANVAS_SIZE, CLEAR_COLOR, TRIANGLE, SQUARE_POSITIONS, SQUARE_INDICES, COLORS, STRIDE_BYTES, Shape } from './shared';
 
 
 // Step 1. Get the WebGL2 context.
@@ -39,7 +39,7 @@ function createVAO(gl: WebGL2RenderingContext,
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.enableVertexAttribArray(ATTRIB.POSITION);
   // Pasamos STRIDE_BYTES a 0, de esta forma decimos que los datos vienen pegados
-  gl.vertexAttribPointer(ATTRIB.POSITION, 3, gl.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(ATTRIB.POSITION, 3, gl.FLOAT, false, STRIDE_BYTES, 0);
   // Eliminamos el atributo de color
 
   // En el caso de tener indices los enlazamos
@@ -103,7 +103,7 @@ export function run(canvas: HTMLCanvasElement): void {
 
   const shapes: Shape[] = [  
     {name: 'Triangle', vao: triangleVao, draw: () => ff.drawArrays(gl.TRIANGLES, 0, 3) },
-    {name: 'Square',    vao: squareVao,  draw: () => ff.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0) },
+    {name: 'Square',   vao: squareVao,   draw: () => ff.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0) },
     // [Proximamente] datos para el hexagono
     // [Proximamente] datos para el circulo
   ];
@@ -111,7 +111,7 @@ export function run(canvas: HTMLCanvasElement): void {
   // Lo que sigue aca es basicamente para manejar los botones y dibujar la figura y color seleccionados
   
   setupState(gl, canvas); // no se si es necesario 
-  
+
   function render(): void {
     const shape = shapes[shapeIndex];
     const color = COLORS[colorIndex];

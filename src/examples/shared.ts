@@ -31,9 +31,23 @@ export const SQUARE_INDICES = new Uint16Array([
   0, 2, 3, // Triangulo 2 (con vertices p0, p2, p3)
 ]);
 
-// [Proximamente] Datos para el Hexágono
+// Funcion auxiliar para crear las posiciones que vamos a usar en el Hexagono y el Circulo
+export function makeCircle(segments: number, radius: number): Float32Array {
 
-// [Proximamente] Datos para el Círculo
+  // Necesitamos 3 puntos como minimo para formar un triangulo, y no podemos tener mas de 64 segmentos
+  if (segments < 3 || segments > 64) {
+    throw new RangeError(`segments must be in [3, 64], got ${segments}`);
+  }
+
+  const positions: number[] = [];
+
+  // Necesitas agregar el centro? Depende del metodo
+  // Recorre los segmentos calculando el angulo de cada punto del borde
+  // angulo ?????? x = radius * Math.cos(ángulo), y = radius * Math.sin(ángulo), z = 0 
+  // Necesitamnos repetir algún punto? para cerrar
+
+  return new Float32Array(positions);
+}
 
 
 // Vamos a definir una interface para poder dibujar cada figura

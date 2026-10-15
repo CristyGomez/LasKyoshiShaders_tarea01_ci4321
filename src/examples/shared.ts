@@ -1,9 +1,9 @@
-// Data shared by both implementations, so the two files differ only in how they drive WebGL.
+// Datos de las figuras, colores y constantes del programa
 
 /** Background color #1b1e2b as linear floats in [0, 1]. */
 export const CLEAR_COLOR: readonly [number, number, number, number] = [0x1b / 255, 0x1e / 255, 0x2b / 255, 1];
 
-/** Canvas size in device pixels. Fixed so both versions render the same pixels. */
+/** Tamaño del canvas en píxeles (ancho y alto). */
 export const CANVAS_SIZE = 480;
 
 /** Interleaved vertex data: x, y per vertex. Clip space, counter-clockwise. */
@@ -42,6 +42,7 @@ export function makeCircle(segments: number, radius: number): Float32Array {
   const positions: number[] = [];
 
   //agregamos el centro del circulo
+  //en TRIANGLE_FAN el primer vertice es el punto en comun
   positions.push(0, 0);
     //paso del angulo para cada segmento, es decir, cuanto tenemos que movernos en el angulo para dibujar el siguiente vertice
     const step = (2 * Math.PI) / segments;
@@ -78,5 +79,6 @@ export const COLORS: Color[] = [
   { name: 'blue',  rgb: [0, 0, 1] },
 ];
 
-export const STRIDE_BYTES = 0
-export const SEGMENTS = 64;
+// 0 = los vértices vienen pegados, sin huecos
+export const STRIDE_BYTES = 0;
+

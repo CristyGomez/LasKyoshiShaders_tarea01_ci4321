@@ -1,7 +1,5 @@
-// RGB triangle, FixedFunction (FF) version.
-// FF hides the shaders. Compare with triangle.vanilla.ts, which shows them.
 import { ATTRIB, createFixedFunction, LIGHTING } from '../vendor/ff/ff';
-import { CANVAS_SIZE, CLEAR_COLOR, TRIANGLE, SQUARE_POSITIONS, SQUARE_INDICES, COLORS, STRIDE_BYTES, Shape, makeCircle, SEGMENTS } from './shared';
+import { CANVAS_SIZE, CLEAR_COLOR, TRIANGLE, SQUARE_POSITIONS, SQUARE_INDICES, COLORS, STRIDE_BYTES, Shape, makeCircle } from './shared';
 
 
 
@@ -40,10 +38,11 @@ function createVAO(gl: WebGL2RenderingContext,
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.enableVertexAttribArray(ATTRIB.POSITION);
   // Pasamos STRIDE_BYTES a 0, de esta forma decimos que los datos vienen pegados
+  // como cada vertice tiene 2 componentes x, y (WebGL rellena z con 0) por eso colocamos 2
   gl.vertexAttribPointer(ATTRIB.POSITION, 2, gl.FLOAT, false, STRIDE_BYTES, 0);
-  // Eliminamos el atributo de color
+  //no habilitamos ATTRIB.COLOR, el color sale de ff.setColor
 
-  // En el caso de tener indices los enlazamos
+  // En el caso de tener indices, los enlazamos. con el VAO activo, para que el VAO lo recuerde
   if (indexBuffer) {
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
   } 
@@ -61,7 +60,7 @@ function setupState(gl: WebGL2RenderingContext, canvas: HTMLCanvasElement): void
 }
 
 // Step 6. Draw. ff.drawArrays binds the FF program and uploads its uniforms first.
-// Modificamos la funcion y ahora le pasamos la interfaz (En donde esta el vao y la funcion que usa para dibujar!!!)
+// Modificamos la funcion y ahora le pasamos la interfaz (En donde esta el vao y la funcion que usa para dibujar)
 // tambien agregamos el color como param
 function draw(gl: WebGL2RenderingContext, 
               ff: ReturnType<typeof createFixedFunction>, 
@@ -79,7 +78,7 @@ function draw(gl: WebGL2RenderingContext,
 export function run(canvas: HTMLCanvasElement): void {
   const gl = getContext(canvas);
   const ff = createFixedFunction(gl, { debug: true });
-  ff.disable(LIGHTING); // unlit: the output is the per-vertex color
+  ff.disable(LIGHTING); // sin iluminacion: el color sale de ff.setColor
   // Buscamos los botones en el HTML usando su id
   const shapeBtn = document.getElementById('shape-btn')!;
   const colorBtn = document.getElementById('color-btn')!;
@@ -101,11 +100,13 @@ export function run(canvas: HTMLCanvasElement): void {
 
   // Hexagono
   const hexPositions = makeCircle(6, 0.6);
-  const hexVao = createVAO(gl, createVertexBuffer(gl, hexPositions));
+  const hexBuffer = createVertexBuffer(gl, hexPositions);
+  const hexVao = createVAO(gl, hexBuffer);
 
   // Circulo
-  const circlePositions = makeCircle(SEGMENTS, 0.6);
-  const circleVao = createVAO(gl, createVertexBuffer(gl, circlePositions)); 
+  const circlePositions = makeCircle(64, 0.6);
+  const circleBuffer = createVertexBuffer(gl, circlePositions);
+  const circleVao = createVAO(gl, circleBuffer); 
 
   //arreglo de figuras, cada una con su nombre, su VAO y la funcion que usa para dibujarse a si misma
   const shapes: Shape[] = [  
@@ -115,10 +116,11 @@ export function run(canvas: HTMLCanvasElement): void {
     { name: 'circle',  vao: circleVao, draw: () => ff.drawArrays(gl.TRIANGLE_FAN, 0, circlePositions.length / 2) },
   ];
 
-  // Lo que sigue aca es basicamente para manejar los botones y dibujar la figura y color seleccionados
-  
-  setupState(gl, canvas); //pone el canvas a 480×480 píxeles reales, para que no se vea borroso
+  setupState(gl, canvas); //fija el tamaño del canvas, el viewport... (para que no se vea borroso) 
 
+  // Lo que sigue aca es basicamente para manejar los botones y dibujar la figura y color seleccionados
+
+  // Funcion que dibuja la figura y color seleccionados, y actualiza el texto de los botones
   function render(): void {
     const shape = shapes[shapeIndex];
     const color = COLORS[colorIndex];

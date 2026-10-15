@@ -9,9 +9,9 @@ export const CANVAS_SIZE = 480;
 /** Interleaved vertex data: x, y, z  per vertex. Clip space, counter-clockwise. */
 export const TRIANGLE = new Float32Array([
   //  x      y     z   (Quitamos los colores)
-   0.0,   0.7,  0.0,  
-  -0.7,  -0.6,  0.0, 
-   0.7,  -0.6,  0.0,  
+   0.0,   0.7,  
+  -0.7,  -0.6, 
+   0.7,  -0.6,  
 ]);
 
 // Datos para el Cuadrado
@@ -19,10 +19,10 @@ export const TRIANGLE = new Float32Array([
 // La posiciones nos dicen donde dibujar los vertices
 export const SQUARE_POSITIONS = new Float32Array([
   // x    y     z
-  -0.7, -0.7, 0.0, // p0 abajo-izquierda
-   0.7, -0.7, 0.0, // p1 abajo-derecha
-   0.7,  0.7, 0.0, // p2 arriba-derecha
-  -0.7,  0.7, 0.0, // p3 arriba-izquierda
+  -0.7, -0.7, // p0 abajo-izquierda
+   0.7, -0.7, // p1 abajo-derecha
+   0.7,  0.7, // p2 arriba-derecha
+  -0.7,  0.7, // p3 arriba-izquierda
 ]);
 
 // Los indices nos dicen que vertices unimos/usamos para formar los triangulos 
@@ -38,14 +38,23 @@ export function makeCircle(segments: number, radius: number): Float32Array {
   if (segments < 3 || segments > 64) {
     throw new RangeError(`segments must be in [3, 64], got ${segments}`);
   }
-
+  // Necesitamos un arreglo para guardar las posiciones de los vertices
   const positions: number[] = [];
 
-  // Necesitas agregar el centro? Depende del metodo
-  // Recorre los segmentos calculando el angulo de cada punto del borde
-  // angulo ?????? x = radius * Math.cos(ángulo), y = radius * Math.sin(ángulo), z = 0 
-  // Necesitamnos repetir algún punto? para cerrar
+  //agregamos el centro del circulo
+  positions.push(0, 0, 0);
+    //paso del angulo para cada segmento, es decir, cuanto tenemos que movernos en el angulo para dibujar el siguiente vertice
+    const step = (2 * Math.PI) / segments;
 
+    //creamos los vertices del circulo, usando cos y sin para calcular las posiciones en x y y
+    for (let i = 0; i <= segments; i++) {
+      const angle = i * step; //calcula el angulo para el vertice actual
+      //multiplicar por el radius para escalar el circulo al tamaño deseado
+      const x = radius * Math.cos(angle); //que  tan a la der o izq esta el punto
+      const y = radius * Math.sin(angle); //que tan arriba o abajo esta el punto
+      //agregamos el vertice al arreglo de posiciones        
+      positions.push(x, y, 0);
+    }
   return new Float32Array(positions);
 }
 

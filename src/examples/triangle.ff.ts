@@ -39,7 +39,7 @@ function createVAO(gl: WebGL2RenderingContext,
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
   gl.enableVertexAttribArray(ATTRIB.POSITION);
   // Pasamos STRIDE_BYTES a 0, de esta forma decimos que los datos vienen pegados
-  gl.vertexAttribPointer(ATTRIB.POSITION, 3, gl.FLOAT, false, STRIDE_BYTES, 0);
+  gl.vertexAttribPointer(ATTRIB.POSITION, 2, gl.FLOAT, false, STRIDE_BYTES, 0);
   // Eliminamos el atributo de color
 
   // En el caso de tener indices los enlazamos
@@ -110,7 +110,7 @@ export function run(canvas: HTMLCanvasElement): void {
 
   // Lo que sigue aca es basicamente para manejar los botones y dibujar la figura y color seleccionados
   
-  setupState(gl, canvas); // no se si es necesario 
+  setupState(gl, canvas); //pone el canvas a 480×480 píxeles reales, para que no se vea borroso
 
   function render(): void {
     const shape = shapes[shapeIndex];

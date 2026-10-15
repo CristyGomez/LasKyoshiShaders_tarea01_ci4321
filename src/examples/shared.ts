@@ -6,9 +6,9 @@ export const CLEAR_COLOR: readonly [number, number, number, number] = [0x1b / 25
 /** Canvas size in device pixels. Fixed so both versions render the same pixels. */
 export const CANVAS_SIZE = 480;
 
-/** Interleaved vertex data: x, y, z  per vertex. Clip space, counter-clockwise. */
+/** Interleaved vertex data: x, y per vertex. Clip space, counter-clockwise. */
 export const TRIANGLE = new Float32Array([
-  //  x      y     z   (Quitamos los colores)
+  //  x      y  (Quitamos los colores)
    0.0,   0.7,  
   -0.7,  -0.6, 
    0.7,  -0.6,  
@@ -18,7 +18,7 @@ export const TRIANGLE = new Float32Array([
 
 // La posiciones nos dicen donde dibujar los vertices
 export const SQUARE_POSITIONS = new Float32Array([
-  // x    y     z
+  // x    y  
   -0.7, -0.7, // p0 abajo-izquierda
    0.7, -0.7, // p1 abajo-derecha
    0.7,  0.7, // p2 arriba-derecha
@@ -42,7 +42,7 @@ export function makeCircle(segments: number, radius: number): Float32Array {
   const positions: number[] = [];
 
   //agregamos el centro del circulo
-  positions.push(0, 0, 0);
+  positions.push(0, 0);
     //paso del angulo para cada segmento, es decir, cuanto tenemos que movernos en el angulo para dibujar el siguiente vertice
     const step = (2 * Math.PI) / segments;
 
@@ -53,7 +53,7 @@ export function makeCircle(segments: number, radius: number): Float32Array {
       const x = radius * Math.cos(angle); //que  tan a la der o izq esta el punto
       const y = radius * Math.sin(angle); //que tan arriba o abajo esta el punto
       //agregamos el vertice al arreglo de posiciones        
-      positions.push(x, y, 0);
+      positions.push(x, y);
     }
   return new Float32Array(positions);
 }
@@ -79,3 +79,4 @@ export const COLORS: Color[] = [
 ];
 
 export const STRIDE_BYTES = 0
+export const SEGMENTS = 64;
